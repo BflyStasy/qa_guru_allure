@@ -1,14 +1,12 @@
 package qaguru.github;
 
-import com.codeborne.selenide.Condition;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Owner;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
-import javax.xml.xpath.XPath;
-
+import static Data.ReadData.*;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byName;
 import static com.codeborne.selenide.Selectors.withText;
@@ -16,13 +14,13 @@ import static com.codeborne.selenide.Selenide.*;
 import static io.qameta.allure.Allure.parameter;
 import static io.qameta.allure.Allure.step;
 
+
+
 @Owner("BflyStasy")
 @Feature("Работа с задачами")
-public class IssueTest {
+public class IssueTest  {
     private static final String
             REPOSITORY = "BflyStasy/qa_guru_tests",
-            LOGIN = "",
-            PASSWORD = "",
             NAME_ISSUE = "name_01",
             BODY_ISSUE = "test",
             USER = "BflyStasy";
@@ -30,6 +28,9 @@ public class IssueTest {
     @Test
     @DisplayName("Пользователь должен иметь возможность создать Issue")
     public void addNewIssue() {
+        String login = loadProperty(LOGIN);
+        String password = loadProperty(PASSWORD);
+
         parameter("Репозиторий", REPOSITORY);
         parameter("Название Issue", NAME_ISSUE);
         parameter("Имя пользователя на которого назначено Issue", USER);
@@ -39,9 +40,9 @@ public class IssueTest {
         step("Авторизуемся", () -> {
             $(withText("Sign in")).click();
             $(byName("login")).click();
-            $(byName("login")).setValue(LOGIN);
+            $(byName("login")).setValue(login);
             $(byName("password")).click();
-            $(byName("password")).setValue(PASSWORD);
+            $(byName("password")).setValue(password);
             $(byName("commit")).click();
         });
         step("Ищем репозиторий " + REPOSITORY, () -> {
