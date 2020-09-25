@@ -18,16 +18,16 @@ import static io.qameta.allure.Allure.step;
 
 @Owner("BflyStasy")
 @Feature("Работа с задачами")
-public class IssueTest  {
+public class IssueTest_lambda {
     private static final String
             REPOSITORY = "BflyStasy/qa_guru_tests",
-            NAME_ISSUE = "name_01",
-            BODY_ISSUE = "test",
+            NAME_ISSUE = "name_02",
+            BODY_ISSUE = "test_02",
             USER = "BflyStasy";
 
     @Test
     @DisplayName("Пользователь должен иметь возможность создать Issue")
-    public void addNewIssue() {
+    public void addNewIssue_2() {
         String login = loadProperty(LOGIN);
         String password = loadProperty(PASSWORD);
 
@@ -78,5 +78,6 @@ public class IssueTest  {
 
 
     }
+
 
 }
