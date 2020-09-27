@@ -8,6 +8,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byName;
 import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.*;
+import static io.qameta.allure.Allure.parameter;
 
 public class BasicSteps {
 
@@ -34,6 +35,7 @@ public class BasicSteps {
     @Step("Ищем репозиторий")
     public void searchRepository(final String name)
     {
+        parameter("Репозиторий", name);
         $(".header-search-input").click();
         $(".header-search-input").sendKeys(name);
         $(".header-search-input").submit();
@@ -68,12 +70,14 @@ public class BasicSteps {
     @Step("Проверяем имя созданной задачи")
     public void shouldSeeNameIssue(final String name)
     {
+        parameter("Название Issue", name);
         $(".js-issue-title").shouldHave(text(name));
     }
 
     @Step("Проверяем на кого назначена задача")
     public void shouldSeeAssignToIssue(final String user)
     {
+        parameter("Имя пользователя на которого назначено Issue", user);
         $(".js-hovercard-left").$(".assignee").$(".css-truncate-target").shouldHave(text(user));
     }
 }

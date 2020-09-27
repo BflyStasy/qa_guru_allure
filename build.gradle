@@ -24,6 +24,7 @@ allure {
 test {
     useJUnitPlatform()
 }
+
 dependencies {
 
     compile("io.qameta.allure:allure-java-commons:2.13.5")
@@ -42,5 +43,6 @@ dependencies {
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
+
 
 

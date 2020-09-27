@@ -5,8 +5,8 @@ import io.qameta.allure.Owner;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+
 import static Data.ReadData.*;
-import static io.qameta.allure.Allure.parameter;
 
 @Owner("BflyStasy")
 @Feature("Работа с задачами")
@@ -23,13 +23,11 @@ public class IssueTest_step {
 
     @Test
     @DisplayName("Пользователь должен иметь возможность создать Issue")
-    public void addNewIssue_3() {
+    public void testAddNewIssue3() {
+
+
         String login = loadProperty(LOGIN);
         String password = loadProperty(PASSWORD);
-
-        parameter("Репозиторий", REPOSITORY);
-        parameter("Название Issue", NAME_ISSUE);
-        parameter("Имя пользователя на которого назначено Issue", USER);
 
         steps.openMainPage();
         steps.authorization(login, password);
