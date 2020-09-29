@@ -2,11 +2,11 @@ package qaguru.github;
 
 import io.qameta.allure.Feature;
 import io.qameta.allure.Owner;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-
-import static Data.ReadData.*;
+import static com.codeborne.selenide.Selenide.closeWebDriver;
 
 @Owner("BflyStasy")
 @Feature("Работа с задачами")
@@ -25,12 +25,12 @@ public class IssueTest_step {
     @DisplayName("Пользователь должен иметь возможность создать Issue")
     public void testAddNewIssue3() {
 
-
+/*
         String login = loadProperty(LOGIN);
         String password = loadProperty(PASSWORD);
-
+*/
         steps.openMainPage();
-        steps.authorization(login, password);
+        steps.authorization();
         steps.searchRepository(REPOSITORY);
         steps.openRepository(REPOSITORY);
         steps.openIssuesPage();
@@ -38,5 +38,10 @@ public class IssueTest_step {
         steps.shouldSeeNameIssue(NAME_ISSUE);
         steps.shouldSeeAssignToIssue(USER);
 
+    }
+
+    @AfterEach
+    public void closeDriver() {
+        closeWebDriver();
     }
 }

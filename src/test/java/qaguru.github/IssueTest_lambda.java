@@ -2,6 +2,7 @@ package qaguru.github;
 
 import io.qameta.allure.Feature;
 import io.qameta.allure.Owner;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -63,7 +64,7 @@ public class IssueTest_lambda {
             $(By.id("issue_body")).click();
             $(By.id("issue_body")).setValue(BODY_ISSUE);
             $(".js-issue-assign-self").click();
-            sleep(1000);
+            $(".js-hovercard-left .assignee .css-truncate-target").shouldHave(text(USER));
             $(withText("Submit new issue")).click();
         });
 
@@ -72,11 +73,15 @@ public class IssueTest_lambda {
         });
 
         step("Проверяем на кого назначена задача",() -> {
-            $(".js-hovercard-left").$(".assignee").$(".css-truncate-target").shouldHave(text(USER));
+            $(".js-hovercard-left .assignee .css-truncate-target").shouldHave(text(USER));
         });
 
 
     }
 
+    @AfterEach
+    public void closeDriver() {
+        closeWebDriver();
+    }
 
 }

@@ -1,9 +1,9 @@
 package qaguru.github;
 
-import com.codeborne.selenide.logevents.LogEvent;
-import com.codeborne.selenide.logevents.LogEventListener;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.Feature;
+import io.qameta.allure.selenide.AllureSelenide;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,31 +14,24 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byName;
 import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.Selenide.$;
 import static io.qameta.allure.Allure.parameter;
+import static qaguru.github.NamedBy.css;
+import static qaguru.github.NamedBy.named;
 
 @Feature("Работа с задачами")
 public class IssueTest_listener {
     private static final String
             REPOSITORY = "BflyStasy/qa_guru_tests",
-            NAME_ISSUE = "name_02",
-            BODY_ISSUE = "test_02",
+            NAME_ISSUE = "name_01",
+            BODY_ISSUE = "test_01",
             USER = "BflyStasy";
 
     @BeforeEach
     public void initLogger()
     {
-        SelenideLogger.addListener("allure", new LogEventListener() {
-            @Override
-            public void afterEvent(LogEvent currentLog) {
-                System.out.printf("Start %s%n",currentLog.toString());
-            }
-
-            @Override
-            public void beforeEvent(LogEvent currentLog) {
-                System.out.printf("Stop %s%n",currentLog.toString());
-            }
-        });
+        SelenideLogger.addListener("allure", new AllureSelenide()
+                .savePageSource(true)
+                .screenshots(true));
     }
 
     @Test
@@ -50,34 +43,42 @@ public class IssueTest_listener {
         parameter("Репозиторий", REPOSITORY);
         parameter("Название Issue", NAME_ISSUE);
         parameter("Имя пользователя на которого назначено Issue", USER);
-            open("https://github.com");
 
-            $(withText("Sign in")).click();
-            $(byName("login")).click();
-            $(byName("login")).setValue(login);
-            $(byName("password")).click();
-            $(byName("password")).setValue(password);
-            $(byName("commit")).click();
+        open("https://github.com");
 
-            $(".header-search-input").click();
-            $(".header-search-input").sendKeys(REPOSITORY);
-            $(".header-search-input").submit();
+        $(named(withText("Sign in")).as("Sign in")).click();
+        $(named(byName("login")).as("Поле login")).click();
+        $(named(byName("login")).as("Поле login")).setValue(login);
+        $(named(byName("password")).as("Поле password")).click();
+        $(named(byName("password")).as("Поле password")).setValue(password);
 
-            $(By.linkText(REPOSITORY)).click();
+        $(named(byName("commit")).as("Кнопка Sign in")).click();
 
-            $(By.xpath("//span[contains(text(),'Issues')]")).click();
+        $(css(".header-search-input").as("Поисковая строка в заголовке")).click();
+        $(css(".header-search-input").as("Поисковая строка в заголовке")).sendKeys(REPOSITORY);
+        $(css(".header-search-input").as("Поисковая строка в заголовке")).submit();
 
-            $(".d-md-block").click();
-            $(".input-lg").click();
-            $(".input-lg").setValue(NAME_ISSUE);
-            $(By.id("issue_body")).click();
-            $(By.id("issue_body")).setValue(BODY_ISSUE);
-            $(".js-issue-assign-self").click();
-            sleep(1000);
-            $(withText("Submit new issue")).click();
+        $(named(By.linkText(REPOSITORY)).as("Ссылка на репозиторий")).click();
 
-            $(".js-issue-title").shouldHave(text(NAME_ISSUE));
+        $(named(By.xpath("//span[contains(text(),'Issues')]")).as("Issues")).click();
 
-            $(".js-hovercard-left").$(".assignee").$(".css-truncate-target").shouldHave(text(USER));
+        $(css(".d-md-block").as("Кнопка New Issue")).click();
+        $(css(".input-lg").as("Заголовок для ISSUE")).click();
+        $(css(".input-lg").as("Заголовок для ISSUE")).setValue(NAME_ISSUE);
+        $(named(By.id("issue_body")).as("Тело ISSUE")).click();
+        $(named(By.id("issue_body")).as("Тело ISSUE")).setValue(BODY_ISSUE);
+        $(css(".js-issue-assign-self").as("Ссылка назначить себе")).click();
+
+        $(css(".js-hovercard-left .assignee .css-truncate-target").as("поле Assignes")).shouldHave(text(USER));
+        $(named(withText("Submit new issue")).as("Кнопка Submit new issue")).click();
+
+        $(css(".js-issue-title").as("Имя Issue")).shouldHave(text(NAME_ISSUE));
+
+        $(css(".js-hovercard-left .assignee .css-truncate-target").as("поле Assignes")).shouldHave(text(USER));
+    }
+
+    @AfterEach
+    public void closeDriver() {
+        closeWebDriver();
     }
 }

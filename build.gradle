@@ -16,7 +16,7 @@ allure {
     autoconfigure = true
     version = '2.13.5'
 
-    useJUnit5(){
+    useJUnit5() {
         version = '2.13.5'
     }
 }

@@ -3,7 +3,7 @@ package qaguru.github;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 
-
+import static Data.ReadData.*;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byName;
 import static com.codeborne.selenide.Selectors.withText;
@@ -13,7 +13,7 @@ import static io.qameta.allure.Allure.parameter;
 public class BasicSteps {
 
     private static final String
-            BASE_URL ="https://github.com" ;
+            BASE_URL ="https://github.com";
     @Step("Открываем главную страницу")
     public void openMainPage()
     {
@@ -21,8 +21,10 @@ public class BasicSteps {
     }
 
     @Step("Авторизуемся")
-    public void authorization(final String login, final String password)
+    public void authorization()
     {
+        String login = loadProperty(LOGIN);
+        String password = loadProperty(PASSWORD);
         $(withText("Sign in")).click();
         $(byName("login")).click();
         $(byName("login")).setValue(login);
@@ -78,6 +80,6 @@ public class BasicSteps {
     public void shouldSeeAssignToIssue(final String user)
     {
         parameter("Имя пользователя на которого назначено Issue", user);
-        $(".js-hovercard-left").$(".assignee").$(".css-truncate-target").shouldHave(text(user));
+        $(".js-hovercard-left .assignee .css-truncate-target").shouldHave(text(user));
     }
 }
